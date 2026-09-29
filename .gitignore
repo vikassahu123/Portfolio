@@ -1,0 +1,29 @@
+# Root .gitignore for Vikas Sahu Full-Stack Portfolio
+
+# Node & Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Java / Maven Backend
+backend/target/
+backend/*.jar
+backend/*.war
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+*.log
+
+# OS & Temp
+tmp/
+temp/
