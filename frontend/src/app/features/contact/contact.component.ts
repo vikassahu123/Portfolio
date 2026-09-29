@@ -221,36 +221,98 @@ import { Profile, ContactRequest, ContactResponse, ContactMessage } from '../../
         </div>
       </div>
 
-      <!-- Inquiries Viewer Modal (for Vikas to review received messages) -->
+      <!-- Inquiries Viewer Modal (with 4-digit Developer PIN Protection) -->
       <div class="modal-backdrop" *ngIf="inquiriesModalOpen">
         <div class="glass-card inquiries-modal">
-          <div class="modal-header">
-            <div>
-              <h3 class="modal-title">Received Inquiries (MySQL Database)</h3>
-              <span class="db-source-label">Table: contact_messages &bull; Total: {{ storedMessages.length }}</span>
+          
+          <!-- State 1: PIN Required (Protected Developer Lock Screen) -->
+          <div *ngIf="!isPinAuthenticated" class="pin-auth-container">
+            <div class="modal-header">
+              <div>
+                <span class="security-badge">🔒 RESTRICTED DEVELOPER ACCESS</span>
+                <h3 class="modal-title">Enter Developer Security PIN</h3>
+                <p class="pin-lead">This section contains private client inquiries. Enter your 4-digit master PIN to proceed.</p>
+              </div>
+              <button class="close-modal-btn" (click)="closeInquiriesModal()">✕</button>
             </div>
-            <button class="close-modal-btn" (click)="inquiriesModalOpen = false">✕</button>
+
+            <div class="pin-form-body">
+              <div class="pin-input-group">
+                <input 
+                  type="password" 
+                  maxlength="4" 
+                  inputmode="numeric" 
+                  pattern="[0-9]*"
+                  [(ngModel)]="enteredPin" 
+                  (keyup.enter)="verifyPin()"
+                  placeholder="••••"
+                  class="pin-display-input"
+                  [class.pin-error]="pinError"
+                  autofocus />
+              </div>
+
+              <div *ngIf="pinError" class="pin-error-alert">
+                <span>⚠️ Access Denied: Incorrect PIN. Access is restricted to Vikas Sahu.</span>
+              </div>
+
+              <!-- Quick Numeric Keypad for Mobile and Touch -->
+              <div class="pin-keypad">
+                <button type="button" class="keypad-btn" *ngFor="let digit of [1,2,3,4,5,6,7,8,9]" (click)="appendPinDigit(digit)">
+                  {{ digit }}
+                </button>
+                <button type="button" class="keypad-btn keypad-util" (click)="clearPin()">CLR</button>
+                <button type="button" class="keypad-btn" (click)="appendPinDigit(0)">0</button>
+                <button type="button" class="keypad-btn keypad-util" (click)="backspacePin()">⌫</button>
+              </div>
+
+              <div class="pin-actions">
+                <button type="button" class="btn-primary unlock-btn" (click)="verifyPin()">
+                  <span>⚡ Verify PIN &amp; Unlock</span>
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div class="inquiries-list">
-            <div *ngIf="storedMessages.length === 0" class="empty-inquiries">
-              No inquiries received yet. Submit a message above to see it appear here!
-            </div>
-
-            <div *ngFor="let msg of storedMessages" class="inquiry-item">
-              <div class="inquiry-item-header">
-                <div>
-                  <span class="inquiry-sender">{{ msg.senderName }}</span>
-                  <span class="inquiry-email">(&lt;{{ msg.senderEmail }}&gt;)</span>
+          <!-- State 2: Authenticated (Show Received Messages) -->
+          <div *ngIf="isPinAuthenticated" class="messages-container">
+            <div class="modal-header">
+              <div>
+                <div class="auth-status-pill">
+                  <span class="auth-dot"></span>
+                  <span>Developer Verified (Vikas Sahu)</span>
                 </div>
-                <span class="inquiry-time">{{ msg.createdAt | slice:0:16 }}</span>
+                <h3 class="modal-title">Received Inquiries (MySQL Database)</h3>
+                <span class="db-source-label">Table: contact_messages &bull; Total: {{ storedMessages.length }}</span>
               </div>
-              <div class="inquiry-service-tag">
-                <span>Service:</span> <strong>{{ msg.serviceInterested }}</strong>
+              <div class="modal-header-actions">
+                <button class="btn-lock" (click)="lockInquiries()" title="Lock Session">
+                  <span>🔒 Lock</span>
+                </button>
+                <button class="close-modal-btn" (click)="closeInquiriesModal()">✕</button>
               </div>
-              <p class="inquiry-text">{{ msg.message }}</p>
+            </div>
+
+            <div class="inquiries-list">
+              <div *ngIf="storedMessages.length === 0" class="empty-inquiries">
+                No inquiries received yet. Submit a message above to see it appear here!
+              </div>
+
+              <div *ngFor="let msg of storedMessages" class="inquiry-item">
+                <div class="inquiry-item-header">
+                  <div>
+                    <span class="inquiry-sender">{{ msg.senderName }}</span>
+                    <span class="inquiry-email">(&lt;{{ msg.senderEmail }}&gt;)</span>
+                  </div>
+                  <span class="inquiry-time">{{ msg.createdAt | slice:0:16 }}</span>
+                </div>
+                <div class="inquiry-service-tag">
+                  <span>Service:</span> <strong>{{ msg.serviceInterested }}</strong>
+                </div>
+                <p class="inquiry-text">{{ msg.message }}</p>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -592,6 +654,155 @@ import { Profile, ContactRequest, ContactResponse, ContactMessage } from '../../
       color: #64748b;
       font-size: 0.9375rem;
     }
+
+    /* Developer PIN Lock Screen Styles */
+    .pin-auth-container {
+      padding: 0.5rem;
+    }
+    .security-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+    }
+    .pin-lead {
+      color: #94a3b8;
+      font-size: 0.875rem;
+      margin-top: 0.35rem;
+      line-height: 1.5;
+    }
+    .pin-form-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.5rem 0 0.5rem;
+    }
+    .pin-display-input {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      letter-spacing: 0.8rem;
+      text-align: center;
+      width: 220px;
+      background: #030712;
+      border: 2px solid rgba(45, 212, 191, 0.4);
+      color: #2dd4bf;
+      border-radius: 12px;
+      padding: 0.6rem 1rem;
+      outline: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 15px rgba(45, 212, 191, 0.15);
+    }
+    .pin-display-input:focus {
+      border-color: #2dd4bf;
+      box-shadow: 0 0 20px rgba(45, 212, 191, 0.35);
+    }
+    .pin-display-input.pin-error {
+      border-color: #ef4444;
+      color: #ef4444;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+      animation: shake 0.35s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .pin-error-alert {
+      color: #f87171;
+      font-size: 0.8125rem;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      text-align: center;
+      max-width: 360px;
+    }
+    .pin-keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 68px);
+      gap: 0.65rem;
+      justify-content: center;
+    }
+    .keypad-btn {
+      width: 68px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 1.35rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: grid;
+      place-items: center;
+    }
+    .keypad-btn:hover {
+      background: rgba(45, 212, 191, 0.15);
+      border-color: #2dd4bf;
+      color: #2dd4bf;
+      transform: translateY(-2px);
+    }
+    .keypad-btn:active {
+      transform: scale(0.95);
+    }
+    .keypad-util {
+      font-size: 0.875rem;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+    .unlock-btn {
+      width: 220px;
+      justify-content: center;
+      font-size: 0.875rem;
+    }
+    .modal-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .btn-lock {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-lock:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+    .auth-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-family: var(--font-mono);
+      color: #34d399;
+      margin-bottom: 0.35rem;
+    }
+    .auth-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+    }
   `]
 })
 export class ContactComponent implements OnInit {
@@ -610,6 +821,12 @@ export class ContactComponent implements OnInit {
   lastSubmission: ContactResponse | null = null;
   inquiriesModalOpen = false;
   storedMessages: ContactMessage[] = [];
+
+  // 4-Digit Developer Master PIN Security
+  isPinAuthenticated = false;
+  enteredPin = '';
+  pinError = false;
+  private readonly DEVELOPER_PIN = '1020';
 
   constructor(
     private apiService: ApiService,
@@ -670,8 +887,58 @@ export class ContactComponent implements OnInit {
     });
   }
 
+  verifyPin() {
+    if (this.enteredPin === this.DEVELOPER_PIN) {
+      this.isPinAuthenticated = true;
+      this.pinError = false;
+      this.refreshInquiries();
+      this.toastService.show('Access Granted', 'Developer authenticated successfully.', 'success');
+    } else {
+      this.pinError = true;
+      this.enteredPin = '';
+      this.toastService.show('Access Denied', 'Invalid PIN. Access restricted to Vikas Sahu.', 'error');
+    }
+  }
+
+  appendPinDigit(digit: number) {
+    if (this.enteredPin.length < 4) {
+      this.enteredPin += digit.toString();
+      this.pinError = false;
+      if (this.enteredPin.length === 4) {
+        this.verifyPin();
+      }
+    }
+  }
+
+  clearPin() {
+    this.enteredPin = '';
+    this.pinError = false;
+  }
+
+  backspacePin() {
+    if (this.enteredPin.length > 0) {
+      this.enteredPin = this.enteredPin.slice(0, -1);
+      this.pinError = false;
+    }
+  }
+
+  lockInquiries() {
+    this.isPinAuthenticated = false;
+    this.enteredPin = '';
+    this.pinError = false;
+    this.toastService.show('Session Locked', 'Developer access locked.', 'info');
+  }
+
   openInquiriesModal() {
-    this.refreshInquiries();
+    this.enteredPin = '';
+    this.pinError = false;
     this.inquiriesModalOpen = true;
+  }
+
+  closeInquiriesModal() {
+    this.inquiriesModalOpen = false;
+    this.isPinAuthenticated = false;
+    this.enteredPin = '';
+    this.pinError = false;
   }
 }
