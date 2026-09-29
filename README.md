@@ -1,7 +1,7 @@
 # Vikas Sahu - Full-Stack Portfolio Website
 ### Java 21 • Spring Boot 3 • Angular 19 • MySQL 8.0 • AI & RAG
 
-A production-grade, highly aesthetic personal portfolio website for **Vikas Sahu** ([github.com/vikassahu123](https://github.com/vikassahu123)), built using enterprise software architecture inspired by modern high-impact portfolios ([Agustin Burgos](https://agustinburgos.com/), [Gopal Krishna Jha](https://techmicrosystem.in/), and [DVLPR](https://dvlpr.pro/#home)).
+A production-grade, highly aesthetic personal portfolio website for **Vikas Sahu** ([github.com/vikassahu123](https://github.com/vikassahu123)).
 
 ---
 
