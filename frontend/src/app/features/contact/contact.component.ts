@@ -323,12 +323,13 @@ import { Profile, ContactRequest, ContactResponse, ContactMessage } from '../../
     }
     .contact-grid {
       display: grid;
-      grid-template-columns: 0.85fr 1.15fr;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
       gap: 2.5rem;
+      width: 100%;
     }
     @media (max-width: 900px) {
       .contact-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
@@ -337,6 +338,8 @@ import { Profile, ContactRequest, ContactResponse, ContactMessage } from '../../
       padding: 2.25rem;
       display: flex;
       flex-direction: column;
+      min-width: 0;
+      width: 100%;
     }
     @media (max-width: 640px) {
       .contact-info-card {
@@ -448,6 +451,8 @@ import { Profile, ContactRequest, ContactResponse, ContactMessage } from '../../
     /* Right Form Card */
     .contact-form-card {
       padding: 2.25rem;
+      min-width: 0;
+      width: 100%;
     }
     @media (max-width: 640px) {
       .contact-form-card {

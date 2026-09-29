@@ -71,6 +71,9 @@ import { CommonModule } from '@angular/common';
       font-family: var(--font-mono);
       font-size: 0.8125rem;
       transition: border-color 0.3s ease;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
     }
     .terminal-container:hover {
       border-color: rgba(45, 212, 191, 0.5);
@@ -80,12 +83,15 @@ import { CommonModule } from '@angular/common';
       padding: 0.6rem 1rem;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      justify-content: space-between;
+      gap: 0.5rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      flex-wrap: wrap;
     }
     .window-controls {
       display: flex;
       gap: 6px;
+      flex-shrink: 0;
     }
     .control {
       width: 10px;
@@ -99,7 +105,7 @@ import { CommonModule } from '@angular/common';
     .tab-list {
       display: flex;
       gap: 4px;
-      margin-left: 0.5rem;
+      flex-wrap: wrap;
     }
     .tab-btn {
       background: transparent;
@@ -121,10 +127,22 @@ import { CommonModule } from '@angular/common';
       border-color: rgba(45, 212, 191, 0.2);
     }
     .terminal-meta {
-      margin-left: auto;
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-shrink: 0;
+    }
+    @media (max-width: 500px) {
+      .terminal-header {
+        padding: 0.45rem 0.65rem;
+      }
+      .terminal-meta {
+        display: none;
+      }
+      .tab-btn {
+        font-size: 0.6875rem;
+        padding: 0.2rem 0.45rem;
+      }
     }
     .pulse-dot {
       width: 6px;
@@ -149,11 +167,20 @@ import { CommonModule } from '@angular/common';
       background: rgba(3, 7, 18, 0.95);
       line-height: 1.65;
       overflow-x: auto;
+      width: 100%;
+      max-width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+    @media (max-width: 600px) {
+      .terminal-body {
+        padding: 0.85rem;
+        font-size: 0.75rem;
+      }
     }
     .line {
       white-space: pre;
     }
-    .c-dim { color: #334155; margin-right: 1rem; user-select: none; display: inline-block; width: 1.5rem; text-align: right; }
+    .c-dim { color: #334155; margin-right: 0.75rem; user-select: none; display: inline-block; width: 1.25rem; text-align: right; }
     .c-purple { color: #c084fc; }
     .c-yellow { color: #facc15; }
     .c-cyan { color: #38bdf8; }

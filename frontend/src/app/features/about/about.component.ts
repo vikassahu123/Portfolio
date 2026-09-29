@@ -195,16 +195,24 @@ import { Profile } from '../../core/models/portfolio.models';
       padding: 2.25rem 2.5rem;
       background: rgba(7, 13, 26, 0.85);
       border-color: rgba(45, 212, 191, 0.25);
+      width: 100%;
+      max-width: 100%;
+    }
+    @media (max-width: 640px) {
+      .systems-callout {
+        padding: 1.5rem 1rem;
+      }
     }
     .callout-grid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
       gap: 2.5rem;
       align-items: center;
+      width: 100%;
     }
     @media (max-width: 860px) {
       .callout-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 2rem;
       }
     }

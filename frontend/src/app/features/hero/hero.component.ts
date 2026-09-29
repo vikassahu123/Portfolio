@@ -23,7 +23,7 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
           <!-- Role & Live Availability Pill -->
           <div class="hero-tag">
             <span class="pulse-indicator"></span>
-            <span>AVAILABLE FOR HIRE &bull; FULL STACK &amp; AI SYSTEMS</span>
+            <span class="hero-tag-text">AVAILABLE FOR HIRE &bull; FULL STACK &amp; AI SYSTEMS</span>
           </div>
 
           <!-- Name Headline with Dual-Tone Gradient Text -->
@@ -123,15 +123,23 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
       display: flex;
       align-items: center;
       padding-top: 5.5rem;
-      padding-bottom: 4.5rem;
-      /* Clean developer background: deep slate matching uday-deshmukh.space tokens */
+      padding-bottom: 4rem;
       background-color: var(--bg-base);
       background-image: 
         linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
       background-size: 36px 36px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      overflow: hidden;
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+    @media (max-width: 768px) {
+      .hero-section {
+        padding-top: 4.75rem;
+        padding-bottom: 3rem;
+        min-height: auto;
+      }
     }
 
     /* Interactive Mouse Spotlight Overlay */
@@ -153,33 +161,54 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1.12fr 0.88fr;
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
       gap: 3rem;
       align-items: center;
+      width: 100%;
+      max-width: 100%;
     }
     @media (max-width: 992px) {
       .hero-container {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2.25rem;
       }
     }
 
     /* Left Text Column */
+    .hero-text-content {
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+
     .hero-tag {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       font-family: var(--font-mono);
-      font-size: 0.8125rem;
+      font-size: clamp(0.6875rem, 2.5vw, 0.8125rem);
       font-weight: 600;
       color: #2dd4bf;
       background: rgba(45, 212, 191, 0.08);
       border: 1px solid rgba(45, 212, 191, 0.25);
-      padding: 0.35rem 0.85rem;
+      padding: 0.35rem 0.75rem;
       border-radius: 9999px;
       margin-bottom: 1.25rem;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.03em;
+      max-width: 100%;
+      line-height: 1.35;
     }
+    .hero-tag-text {
+      white-space: normal;
+      word-break: break-word;
+    }
+    @media (max-width: 440px) {
+      .hero-tag {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.6875rem;
+      }
+    }
+
     .pulse-indicator {
       width: 8px;
       height: 8px;
@@ -187,6 +216,7 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
       background: #10b981;
       box-shadow: 0 0 10px #10b981;
       animation: pulseGlow 2s infinite;
+      flex-shrink: 0;
     }
     @keyframes pulseGlow {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -194,16 +224,13 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
     }
 
     .hero-title {
-      font-size: 3rem;
+      font-size: clamp(2.1rem, 7.5vw, 3.75rem);
       font-weight: 800;
       color: #ffffff;
-      line-height: 1.12;
+      line-height: 1.15;
       letter-spacing: -0.03em;
-    }
-    @media (min-width: 768px) {
-      .hero-title {
-        font-size: 3.75rem;
-      }
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     /* Signature Gradient Name (Cyan to Violet Shimmer) */
@@ -212,7 +239,9 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      display: inline-block;
+      display: inline;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
       position: relative;
     }
 
@@ -220,12 +249,14 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
     .typewriter-container {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       margin-top: 0.75rem;
       font-family: var(--font-mono);
-      font-size: 1.15rem;
+      font-size: clamp(0.95rem, 3.6vw, 1.15rem);
       font-weight: 600;
       color: #38bdf8;
       min-height: 1.8rem;
+      word-break: break-word;
     }
     .typewriter-prefix {
       color: #a855f7;
@@ -248,31 +279,30 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
     }
 
     .hero-subtitle {
-      font-size: 1.125rem;
+      font-size: clamp(1rem, 3.2vw, 1.25rem);
       font-weight: 500;
       color: #94a3b8;
       margin-top: 1rem;
       line-height: 1.55;
-    }
-    @media (min-width: 768px) {
-      .hero-subtitle {
-        font-size: 1.25rem;
-      }
+      word-break: break-word;
     }
 
     .hero-description {
-      font-size: 0.9375rem;
+      font-size: clamp(0.875rem, 2.7vw, 0.9375rem);
       color: #64748b;
       margin-top: 0.85rem;
       line-height: 1.65;
       max-width: 600px;
+      word-break: break-word;
     }
 
     .hero-badges {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.45rem;
       margin-top: 1.4rem;
+      width: 100%;
+      max-width: 100%;
     }
 
     .badge-tech {
@@ -280,11 +310,12 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
       border: 1px solid rgba(45, 212, 191, 0.3);
       color: #2dd4bf;
       font-family: var(--font-mono);
-      font-size: 0.8125rem;
+      font-size: clamp(0.7rem, 2.4vw, 0.8125rem);
       font-weight: 500;
-      padding: 0.35rem 0.75rem;
+      padding: 0.3rem 0.65rem;
       border-radius: 6px;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     .badge-tech:hover {
       border-color: #2dd4bf;
@@ -297,16 +328,27 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
       flex-wrap: wrap;
       gap: 0.85rem;
       margin-top: 1.85rem;
+      width: 100%;
+    }
+    @media (max-width: 480px) {
+      .hero-actions {
+        flex-direction: column;
+      }
+      .hero-actions a {
+        width: 100%;
+        justify-content: center;
+      }
     }
 
     .social-strip {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1.25rem;
+      gap: 0.85rem;
       margin-top: 1.75rem;
       padding-top: 1.25rem;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
+      width: 100%;
     }
     .social-label {
       font-size: 0.875rem;
@@ -331,11 +373,15 @@ import { TerminalWidgetComponent } from '../../shared/terminal-widget.component'
     /* Right Column: Code Editor Terminal Widget */
     .hero-terminal-col {
       width: 100%;
+      max-width: 100%;
+      min-width: 0;
       position: relative;
     }
     .terminal-centerpiece {
       position: relative;
       width: 100%;
+      max-width: 100%;
+      min-width: 0;
     }
   `]
 })

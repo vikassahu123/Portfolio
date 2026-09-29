@@ -74,12 +74,13 @@ import { Project } from '../../core/models/portfolio.models';
     }
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 2rem;
+      width: 100%;
     }
     @media (max-width: 900px) {
       .projects-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
@@ -89,6 +90,8 @@ import { Project } from '../../core/models/portfolio.models';
       flex-direction: column;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius-lg);
+      min-width: 0;
+      width: 100%;
     }
     .project-card:hover {
       border-color: rgba(45, 212, 191, 0.4);

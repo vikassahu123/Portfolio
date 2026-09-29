@@ -87,6 +87,8 @@ import { CommonModule } from '@angular/common';
       top: 0;
       left: 0;
       right: 0;
+      width: 100%;
+      max-width: 100vw;
       z-index: 1000;
       background: rgba(3, 7, 18, 0.7);
       backdrop-filter: blur(16px);
@@ -134,6 +136,8 @@ import { CommonModule } from '@angular/common';
       align-items: center;
       justify-content: space-between;
       height: 72px;
+      width: 100%;
+      max-width: 100%;
     }
 
     /* Brand Logo */
@@ -142,6 +146,23 @@ import { CommonModule } from '@angular/common';
       align-items: center;
       gap: 0.75rem;
       text-decoration: none;
+      min-width: 0;
+    }
+    @media (max-width: 420px) {
+      .brand-logo {
+        gap: 0.5rem;
+      }
+      .logo-box {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+      }
+      .brand-name {
+        font-size: 0.875rem;
+      }
+      .brand-role {
+        font-size: 0.625rem;
+      }
     }
     .logo-box {
       display: grid;
