@@ -70,6 +70,17 @@ import { Profile, ContactRequest, ContactResponse, ContactMessage } from '../../
                 </div>
               </a>
             </div>
+
+            <!-- Admin Inquiry Box (For Vikas to review incoming messages) -->
+            <div class="admin-inquiry-box">
+              <span class="inquiry-badge">DEVELOPER ACCESS</span>
+              <div class="inquiry-box-text">
+                <p>Review incoming messages &amp; inquiries stored in the database.</p>
+              </div>
+              <button type="button" class="btn-secondary view-inquiries-btn" (click)="openInquiriesModal()">
+                <span>📥 View Received Messages ({{ storedMessages.length }})</span>
+              </button>
+            </div>
           </div>
 
           <!-- Right Column: Interactive Contact Form -->
